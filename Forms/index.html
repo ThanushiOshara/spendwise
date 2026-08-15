@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpendWise - Personal Finance & Budget Tracker</title>
+    <!-- Google Fonts: Outfit (ලස්සන අකුරු මෝස්තරයක් ලබා ගැනීමට) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- අපගේ CSS ගොනුව සම්බන්ධ කිරීම (පෙනුම අලංකාර කිරීමට) -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons (ලස්සන Icons ලබා ගැනීමට) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js (වියදම් ප්‍රස්ථාර ඇඳීමට) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+                <!-- Header (වෙබ් පිටුවේ ඉහළ කොටස) -->
+        <header class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i data-lucide="trending-up"></i>
+                </div>
+                <h1>SpendWise</h1>
+            </div>
+            <div class="user-profile">
+                <div class="profile-info">
+                    <span class="profile-name">Hello, Guest</span>
+                    <span class="profile-status">Financial Tracker</span>
+                </div>
+                <div class="profile-avatar">
+                    <i data-lucide="user"></i>
+                </div>
+            </div>
+        </header>
+        <!-- Dashboard Layout Grid Start -->
+<main class="dashboard-grid">
+                <!-- Summary Cards Section -->
+        <section class="summary-cards">
+            <!-- Card 1: Balance (මුළු ඉතිරි මුදල) -->
+            <div class="glass-card summary-card balance-card">
+                <div class="card-icon">
+                    <i data-lucide="wallet"></i>
+                </div>
+                <div class="card-info">
+                    <h3>Total Balance</h3>
+                    <p id="total-balance" class="amount">$0.00</p>
+                </div>
+                <div class="card-badge positive">Active</div>
+            </div>
+
+            <!-- Card 2: Income (මුළු ආදායම) -->
+            <div class="glass-card summary-card income-card">
+                <div class="card-icon">
+                    <i data-lucide="arrow-down-left"></i>
+                </div>
+                <div class="card-info">
+                    <h3>Total Income</h3>
+                    <p id="total-income" class="amount">$0.00</p>
+                </div>
+                <div class="card-badge income-glow">Month</div>
+            </div>
+
+            <!-- Card 3: Expenses (මුළු වියදම) -->
+            <div class="glass-card summary-card expense-card">
+                <div class="card-icon">
+                    <i data-lucide="arrow-up-right"></i>
+                </div>
+                <div class="card-info">
+                    <h3>Total Expenses</h3>
+                    <p id="total-expenses" class="amount">$0.00</p>
+                </div>
+                <div class="card-badge expense-glow">Month</div>
+            </div>
+        </section>
+                    <!-- Main Charts & Analytics Block -->
+            <section class="main-content-area">
+                <!-- Financial Chart Container -->
+                <div class="glass-card chart-container">
+                    <div class="card-header">
+                        <h2>Financial Analytics</h2>
+                        <div class="chart-actions">
+                            <span class="legend-item income"><span class="dot"></span>Income</span>
+                            <span class="legend-item expense"><span class="dot"></span>Expenses</span>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="finance-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions Container -->
+                <div class="glass-card list-container">
+                    <div class="card-header">
+                        <h2>Recent Transactions</h2>
+                        <button class="btn btn-secondary btn-sm" id="btn-open-filter">
+                            <i data-lucide="filter" class="icon-sm"></i> Filters
+                        </button>
+                    </div>
+
+                    <!-- Filter Options Panel (perahan thiruwa) -->
+                    <div class="filter-panel" id="filter-panel">
+                        <div class="filter-group">
+                            <input type="text" id="search-filter" placeholder="Search transactions...">
+                        </div>
+                        <div class="filter-group">
+                            <select id="type-filter">
+                                <option value="all">All Types</option>
+                                <option value="income">Incomes</option>
+                                <option value="expense">Expenses</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <select id="category-filter">
+                                <option value="all">All Categories</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" id="btn-clear-filters">Reset</button>
+                    </div>
+
+                    <!-- Dynamic Transaction List -->
+                    <div class="transaction-list" id="transaction-list">
+                        <div class="empty-state">
+                            <i data-lucide="receipt"></i>
+                            <p>No transactions added yet. Click "Add Transaction" below to start!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+                        <!-- Side Cards Block -->
+            <section class="side-content-area">
+                <!-- Budget widget -->
+                <div class="glass-card budget-widget">
+                    <div class="card-header">
+                        <h2>Monthly Budget</h2>
+                        <button class="btn btn-icon" id="btn-edit-budget" title="Set Budget">
+                            <i data-lucide="edit-3" class="icon-sm"></i>
+                        </button>
+                    </div>
+                    <div class="budget-status">
+                        <!-- circular progress ring -->
+                        <div class="budget-progress-container">
+                            <svg class="progress-ring" width="120" height="120">
+                                <circle class="progress-ring__circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60" />
+                                <circle id="budget-progress-ring" class="progress-ring__circle" stroke="var(--primary-color)" stroke-width="8" stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke-linecap="round" fill="transparent" r="50" cx="60" cy="60" />
+                            </svg>
+                            <div class="progress-text-overlay">
+                                <span id="budget-pct">0%</span>
+                                <small>Spent</small>
+                            </div>
+                        </div>
+                        <!-- budget details text -->
+                        <div class="budget-details">
+                            <div class="budget-row">
+                                <span>Budget Goal:</span>
+                                <strong id="budget-limit-val">$0.00</strong>
+                            </div>
+                            <div class="budget-row">
+                                <span>Spent So Far:</span>
+                                <strong id="budget-spent-val">$0.00</strong>
+                            </div>
+                            <div class="budget-row">
+                                <span>Remaining:</span>
+                                <strong id="budget-remaining-val">$0.00</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Savings Goals widget -->
+                <div class="glass-card savings-widget">
+                    <div class="card-header">
+                        <h2>Savings Goals</h2>
+                        <button class="btn btn-secondary btn-xs" id="btn-open-goal-modal">
+                            <i data-lucide="plus" class="icon-xs"></i> New Goal
+                        </button>
+                    </div>
+                    <div class="savings-goals-list" id="savings-goals-list">
+                        <div class="empty-state">
+                            <i data-lucide="piggy-bank"></i>
+                            <p>No savings goals set. Save for something special!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions card -->
+                <div class="glass-card quick-actions">
+                    <h2>Quick Actions</h2>
+                    <button class="btn btn-primary btn-block" id="btn-open-transaction-modal">
+                        <i data-lucide="plus-circle"></i> Add Transaction
+                    </button>
+                </div>
+            </section>
+        </main> <!-- Dashboard Layout Grid End (පියවර 5 දී ආරම්භ කළ main tag එක වසා දැමීම) -->
