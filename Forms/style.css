@@ -1,0 +1,858 @@
+/* SpendWise Modern Glassmorphic Stylesheet */
+
+/* Design Tokens & Variables (ප්‍රධාන වර්ණ සහ සැකසුම්) */
+:root {
+    --bg-color: #0b0b0f;
+    --app-bg-gradient: radial-gradient(circle at 50% 50%, #151324 0%, #0b0b0f 100%);
+    --card-bg: rgba(22, 22, 33, 0.55);
+    --card-border: rgba(255, 255, 255, 0.07);
+    --card-hover-border: rgba(147, 51, 234, 0.4);
+    
+    --primary-color: #9333ea; /* Purple වර්ණය */
+    --primary-gradient: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+    --income-color: #10b981; /* Emerald Green (ආදායම් සඳහා) */
+    --income-gradient: linear-gradient(135deg, #34d399 0%, #059669 100%);
+    --expense-color: #f43f5e; /* Rose Red (වියදම් සඳහා) */
+    --expense-gradient: linear-gradient(135deg, #fb7185 0%, #e11d48 100%);
+    --warning-color: #f59e0b; /* Amber */
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    
+    --font-family: 'Outfit', sans-serif;
+    --shadow-premium: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    --blur-intensity: 16px;
+    --border-radius-lg: 20px;
+    --border-radius-md: 12px;
+    --border-radius-sm: 8px;
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* පොදු සැකසුම් (Base resets) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image: var(--app-bg-gradient);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ප්‍රධාන Layout එකෙහි සීමාවන් (App container) */
+.app-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    
+}
+/* Header styling (ඉහළ තීරුවේ පෙනුම) */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-icon {
+    width: 42px;
+    height: 42px;
+    background: var(--primary-gradient);
+    border-radius: var(--border-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(147, 51, 234, 0.4);
+}
+
+.logo-icon i {
+    color: #fff;
+    width: 22px;
+    height: 22px;
+}
+
+.logo-area h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: linear-gradient(to right, #fff, var(--text-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.profile-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.profile-status {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.profile-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+}
+
+/* Glassmorphism Card (වීදුරු මෙන් පෙනෙන කාඩ්පත් මෝස්තරය) */
+.glass-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(var(--blur-intensity));
+    -webkit-backdrop-filter: blur(var(--blur-intensity));
+    border: 1px solid var(--card-border);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-premium);
+    padding: 1.5rem;
+    transition: var(--transition-smooth);
+}
+
+.glass-card:hover {
+    border-color: var(--card-hover-border);
+    box-shadow: 0 12px 40px 0 rgba(147, 51, 234, 0.15);
+}
+
+/* Grid System (කාඩ්පත් තිරය මත බෙදා හැරීම) */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr;
+    gap: 1.5rem;
+}
+
+/* Summary Row (මුදල් විස්තර පෙන්වන ඉහළ කාඩ්පත් පේළිය) */
+.summary-cards {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.summary-card {
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 1.75rem 1.5rem;
+}
+
+/* කාඩ්පත්වල වම් පසින් ඇති පාට තීරුව (Colored indicators) */
+.summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+}
+
+.balance-card::before { background: var(--primary-gradient); }
+.income-card::before { background: var(--income-gradient); }
+.expense-card::before { background: var(--expense-gradient); }
+
+.balance-card { box-shadow: 0 8px 32px 0 rgba(147, 51, 234, 0.08); }
+.income-card { box-shadow: 0 8px 32px 0 rgba(16, 185, 129, 0.08); }
+.expense-card { box-shadow: 0 8px 32px 0 rgba(244, 63, 94, 0.08); }
+
+.card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--border-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.25rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.balance-card .card-icon { color: #c084fc; background: rgba(147, 51, 234, 0.1); }
+.income-card .card-icon { color: #34d399; background: rgba(16, 185, 129, 0.1); }
+.expense-card .card-icon { color: #fb7185; background: rgba(244, 63, 94, 0.1); }
+
+.card-info h3 {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.card-info .amount {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.card-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+}
+
+.card-badge.positive { color: #c084fc; background: rgba(147, 51, 234, 0.15); }
+.income-glow { color: #34d399; background: rgba(16, 185, 129, 0.15); }
+.expense-glow { color: #fb7185; background: rgba(244, 63, 94, 0.15); }
+
+/* Left column and Right column blocks */
+.main-content-area {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.side-content-area {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+/* Card Header inside containers */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.card-header h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Chart Canvas container style */
+.chart-container {
+    padding: 1.5rem;
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 280px;
+    width: 100%;
+}
+
+.chart-actions {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary);
+}
+
+.legend-item .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.legend-item.income .dot { background-color: var(--income-color); }
+.legend-item.expense .dot { background-color: var(--expense-color); }
+
+/* Budget Progress Ring styles (අයවැය රවුමේ මෝස්තර) */
+.budget-status {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.5rem 0;
+}
+
+.budget-progress-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-ring {
+    transform: rotate(-90deg); /* රවුම උඩින්ම පටන් ගැනීමට කරකැවීම */
+}
+
+.progress-ring__circle-bg {
+    stroke: rgba(255, 255, 255, 0.05);
+}
+
+.progress-ring__circle {
+    transition: stroke-dashoffset 0.35s;
+    transform-origin: 50% 50%;
+}
+
+.progress-text-overlay {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-text-overlay span {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.progress-text-overlay small {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.budget-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.budget-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.budget-row strong {
+    color: var(--text-primary);
+}
+
+/* Savings Goals (ඉතුරුම් ඉලක්ක කාඩ්පත් මෝස්තර) */
+.savings-goals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.goal-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius-md);
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.goal-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.goal-card-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.goal-card-amounts {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.goal-progress-bar-bg {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.goal-progress-bar-fill {
+    height: 100%;
+    background: var(--primary-gradient);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+
+.goal-actions {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+    opacity: 0; /* මවුස් එක කාඩ්පත උඩට ගෙන යන තෙක් බොත්තම් නොපෙනේ */
+    transition: var(--transition-smooth);
+    display: flex;
+    gap: 0.25rem;
+}
+
+.goal-card:hover .goal-actions {
+    opacity: 1; /* මවුස් එක ගිය විට බොත්තම් පෙන්වීම */
+}
+
+/* Buttons styling (බොත්තම්වල පෙනුම) */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-family);
+    font-weight: 600;
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    outline: none;
+}
+
+.btn-primary {
+    background: var(--primary-gradient);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px); /* hover කළ විට පොඩ්ඩක් ඉහළට එසවීම */
+    box-shadow: 0 6px 20px rgba(147, 51, 234, 0.45);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.btn-block {
+    width: 100%;
+    padding: 0.9rem;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    border-radius: var(--border-radius-sm);
+}
+
+.btn-xs {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: var(--border-radius-sm);
+}
+
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.btn-icon:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.icon-sm { width: 16px; height: 16px; }
+.icon-xs { width: 12px; height: 12px; }
+/* Transaction List feed (ගනුදෙනු ලැයිස්තුවේ පෙනුම) */
+.transaction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+}
+
+/* Custom scrollbar for transaction list */
+.transaction-list::-webkit-scrollbar {
+    width: 4px;
+}
+.transaction-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+.transaction-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+.transaction-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.transaction-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: var(--border-radius-md);
+    transition: var(--transition-smooth);
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.transaction-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.tx-left-block {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.tx-cat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tx-cat-icon.income {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--income-color);
+}
+
+.tx-cat-icon.expense {
+    background: rgba(244, 63, 94, 0.1);
+    color: var(--expense-color);
+}
+
+.tx-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.tx-desc {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.tx-meta {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.tx-tag {
+    background: rgba(255, 255, 255, 0.04);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+}
+
+.tx-right-block {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.tx-amount {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.tx-amount.income { color: var(--income-color); }
+.tx-amount.expense { color: var(--expense-color); }
+
+/* මකා දැමීමේ බොත්තම (Delete button) - hover කළ විට පමණක් පෙනේ */
+.tx-delete-btn {
+    opacity: 0;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: var(--transition-smooth);
+}
+
+.transaction-item:hover .tx-delete-btn {
+    opacity: 1;
+}
+
+.tx-delete-btn:hover {
+    color: var(--expense-color);
+    background: rgba(244, 63, 94, 0.15);
+}
+
+/* Empty states (දත්ත කිසිවක් නැති විට පෙන්වන රූපය) */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.empty-state i {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.75rem;
+    color: rgba(255, 255, 255, 0.05);
+}
+
+.empty-state p {
+    font-size: 0.85rem;
+}
+
+/* Modal overlays (Pop-ups වල පසුබිම) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.modal-overlay.active {
+    display: flex;
+    animation: fadeInModal 0.25s ease-out;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 480px;
+    background: rgba(20, 20, 32, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    transform: scale(0.95);
+    transition: var(--transition-smooth);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 0.75rem;
+}
+
+.modal-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.btn-close {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-close:hover {
+    color: var(--text-primary);
+}
+
+/* Form inputs & styles inside Modal (පෝරමයේ කොටස්) */
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group input:not([type="radio"]), .form-group select {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius-md);
+    font-family: var(--font-family);
+    font-size: 0.95rem;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.form-group input:focus, .form-group select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(147, 51, 234, 0.2);
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* Income/Expense selection (වර්ගය තෝරන බොත්තම) */
+.type-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.type-selector input[type="radio"] {
+    display: none;
+}
+
+.type-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition-smooth);
+}
+
+.type-label i {
+    width: 18px;
+    height: 18px;
+}
+
+.type-selector input[type="radio"]:checked + .income-select {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: var(--income-color);
+    color: var(--income-color);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+}
+
+.type-selector input[type="radio"]:checked + .expense-select {
+    background: rgba(244, 63, 94, 0.12);
+    border-color: var(--expense-color);
+    color: var(--expense-color);
+    box-shadow: 0 0 15px rgba(244, 63, 94, 0.15);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.modal-actions .btn {
+    padding: 0.65rem 1.25rem;
+}
+
+/* Mobile & Tablet Responsiveness (ජංගම දුරකථන සඳහා හැඩගැන්වීම්) */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr; /* තනි තීරුවක් බවට පත් කිරීම */
+    }
+}
+
+@media (max-width: 768px) {
+    .summary-cards {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .filter-panel {
+        grid-template-columns: 1fr;
+    }
+    
+    .budget-status {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .profile-info {
+        align-items: flex-start;
+    }
+    
+    .user-profile {
+        width: 100%;
+        justify-content: space-between;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        padding-top: 1rem;
+    }
+}
