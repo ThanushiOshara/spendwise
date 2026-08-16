@@ -28,15 +28,14 @@ const CATEGORY_ICONS = {
     // Fallback
     'Other': 'help-circle'
 };
-
-// 3. Initial State (අපගේ දත්ත LocalStorage වෙතින් ලබාගැනීම හෝ default දත්ත ඇතුළත් කිරීම)
+// Initial state / LocalStorage loading
 let state = {
-    transactions: JSON.parse(localStorage.getItem('spendwise_transactions')) || [],
-    budgetLimit: parseFloat(localStorage.getItem('spendwise_budget_limit')) || 2500,
-    savingsGoals: JSON.parse(localStorage.getItem('spendwise_savings_goals')) || []
+    transactions: JSON.parse(localStorage.getItem('spendwise_lkr_transactions')) || [],
+    budgetLimit: parseFloat(localStorage.getItem('spendwise_lkr_budget_limit')) || 100000, // රු. 100,000 default budget
+    savingsGoals: JSON.parse(localStorage.getItem('spendwise_lkr_savings_goals')) || []
 };
 
-// වෙබ් අඩවිය මුලින්ම විවෘත කරන විට එය හිස්ව නොපෙන්වා ලස්සනට පෙන්වීමට sample දත්ත කිහිපයක් එකතු කිරීම:
+// Seed initial demo data
 if (state.transactions.length === 0) {
     const today = new Date();
     const formatOffsetDate = (daysAgo) => {
@@ -46,17 +45,24 @@ if (state.transactions.length === 0) {
     };
     
     state.transactions = [
-        { id: '1', type: 'income', amount: 3500, category: 'Salary', date: formatOffsetDate(14), description: 'Monthly Salary' },
-        { id: '2', type: 'income', amount: 650, category: 'Freelance', date: formatOffsetDate(5), description: 'UI/UX Design project' },
-        { id: '3', type: 'expense', amount: 1200, category: 'Housing/Rent', date: formatOffsetDate(14), description: 'Apartment Rent' },
-        { id: '4', type: 'expense', amount: 154.50, category: 'Groceries', date: formatOffsetDate(8), description: 'Weekly Groceries' },
-        { id: '5', type: 'expense', amount: 85.00, category: 'Utilities', date: formatOffsetDate(6), description: 'Electricity Bill' },
-        { id: '6', type: 'expense', amount: 92.30, category: 'Dining Out', date: formatOffsetDate(3), description: 'Dinner with friends' },
-        { id: '7', type: 'expense', amount: 120.00, category: 'Shopping', date: formatOffsetDate(1), description: 'Running shoes' }
+        { id: '1', type: 'income', amount: 150000, category: 'Salary', date: formatOffsetDate(14), description: 'Monthly Salary' },
+        { id: '2', type: 'income', amount: 35000, category: 'Freelance', date: formatOffsetDate(5), description: 'UI/UX Design project' },
+        { id: '3', type: 'expense', amount: 45000, category: 'Housing/Rent', date: formatOffsetDate(14), description: 'Apartment Rent' },
+        { id: '4', type: 'expense', amount: 18500, category: 'Groceries', date: formatOffsetDate(8), description: 'Weekly Groceries' },
+        { id: '5', type: 'expense', amount: 12500, category: 'Utilities', date: formatOffsetDate(6), description: 'Electricity Bill' },
+        { id: '6', type: 'expense', amount: 6800, category: 'Dining Out', date: formatOffsetDate(3), description: 'Dinner with friends' },
+        { id: '7', type: 'expense', amount: 15000, category: 'Shopping', date: formatOffsetDate(1), description: 'Running shoes' }
     ];
     saveToLocalStorage('transactions', state.transactions);
 }
 
+if (state.savingsGoals.length === 0) {
+    state.savingsGoals = [
+        { id: 'g1', name: 'Emergency Fund', target: 500000, saved: 150000 },
+        { id: 'g2', name: 'New MacBook Pro', target: 350000, saved: 120000 }
+    ];
+    saveToLocalStorage('savingsGoals', state.savingsGoals);
+}
 if (state.savingsGoals.length === 0) {
     state.savingsGoals = [
         { id: 'g1', name: 'Emergency Fund', target: 5000, saved: 2500 },
@@ -133,14 +139,14 @@ const elements = {
 };
 // 5. Format & LocalStorage Helpers (මුදල් හැඩගැන්වීම් සහ දත්ත සුරැකීම්)
 function formatCurrency(amount) {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
+    return 'Rs. ' + new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
     }).format(amount);
 }
 
 function saveToLocalStorage(key, data) {
-    localStorage.setItem(`spendwise_${key}`, JSON.stringify(data));
+    localStorage.setItem(`spendwise_lkr_${key}`, JSON.stringify(data));
 }
 
 // 6. App Initialization (වෙබ් පිටුව මුලින්ම ලෝඩ් වන විට ක්‍රියාත්මක වන කොටස)
