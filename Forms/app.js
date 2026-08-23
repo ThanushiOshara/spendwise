@@ -217,6 +217,7 @@ function setupEventListeners() {
     elements.transactionForm.addEventListener('submit', handleTransactionSubmit);
     elements.budgetForm.addEventListener('submit', handleBudgetSubmit);
     elements.goalForm.addEventListener('submit', handleGoalSubmit);
+    elements.profileForm.addEventListener('submit', handleProfileSubmit);
     
     // සෙවුම් තීරුව (Filter panel) විවෘත කිරීම සහ Filters ක්‍රියාත්මක කිරීම
     elements.btnOpenFilter.addEventListener('click', () => {
