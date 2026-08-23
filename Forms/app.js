@@ -31,8 +31,10 @@ const CATEGORY_ICONS = {
 // Initial state / LocalStorage loading
 let state = {
     transactions: JSON.parse(localStorage.getItem('spendwise_lkr_transactions')) || [],
-    budgetLimit: parseFloat(localStorage.getItem('spendwise_lkr_budget_limit')) || 100000, // රු. 100,000 default budget
-    savingsGoals: JSON.parse(localStorage.getItem('spendwise_lkr_savings_goals')) || []
+    budgetLimit: parseFloat(localStorage.getItem('spendwise_lkr_budget_limit')) || 100000,
+    savingsGoals: JSON.parse(localStorage.getItem('spendwise_lkr_savings_goals')) || [],
+    profileName: localStorage.getItem('spendwise_lkr_profile_name') || 'Guest',
+    profileStatus: localStorage.getItem('spendwise_lkr_profile_status') || 'Financial Tracker'
 };
 
 // Seed initial demo data
@@ -135,7 +137,18 @@ const elements = {
     filterPanel: document.getElementById('filter-panel'),
     searchFilter: document.getElementById('search-filter'),
     typeFilter: document.getElementById('type-filter'),
-    categoryFilter: document.getElementById('category-filter')
+    categoryFilter: document.getElementById('category-filter'),
+
+        // Profile Elements
+    profileNameDisplay: document.querySelector('.profile-name'),
+    profileStatusDisplay: document.querySelector('.profile-status'),
+    profileTrigger: document.getElementById('user-profile-trigger'),
+    profileModal: document.getElementById('profile-modal'),
+    profileForm: document.getElementById('profile-form'),
+    profileNameInput: document.getElementById('profile-name-input'),
+    profileStatusInput: document.getElementById('profile-status-input'),
+    btnCancelProfile: document.getElementById('btn-cancel-profile'),
+    btnCloseProfileModal: document.getElementById('btn-close-profile-modal')
 };
 // 5. Format & LocalStorage Helpers (මුදල් හැඩගැන්වීම් සහ දත්ත සුරැකීම්)
 function formatCurrency(amount) {
@@ -220,6 +233,17 @@ function setupEventListeners() {
         elements.categoryFilter.value = 'all';
         renderTransactions();
     });
+
+        // Profile Modal එක විවෘත කිරීම
+    elements.profileTrigger.addEventListener('click', () => {
+        elements.profileNameInput.value = state.profileName;
+        elements.profileStatusInput.value = state.profileStatus;
+        openModal(elements.profileModal);
+    });
+    
+    // Profile Modal එක වැසීම (Cancel / Close)
+    elements.btnCloseProfileModal.addEventListener('click', () => closeModal(elements.profileModal));
+    elements.btnCancelProfile.addEventListener('click', () => closeModal(elements.profileModal));
 }
 
 // 8. Modal පාලන Helpers
@@ -296,6 +320,10 @@ function updateUI() {
     renderSavingsGoals();
     renderTransactions();
     renderChart(state.transactions);
+
+        // Profile එක තිරය මත යාවත්කාලීන කිරීම
+    elements.profileNameDisplay.textContent = `Hello, ${state.profileName}`;
+    elements.profileStatusDisplay.textContent = state.profileStatus;
 }
 
 // 11. අයවැය (Budget) ප්‍රගතිය ගණනය කර පෙන්වීම
@@ -671,4 +699,21 @@ function renderChart(transactions) {
             cutout: '70%'
         }
     });
+}
+// Profile පෝරමය (Profile Form) Submit කිරීම පාලනය කිරීම
+function handleProfileSubmit(e) {
+    e.preventDefault();
+    
+    const newName = elements.profileNameInput.value.trim();
+    const newStatus = elements.profileStatusInput.value.trim();
+    
+    state.profileName = newName;
+    state.profileStatus = newStatus;
+    
+    // LocalStorage හි සුරැකීම
+    localStorage.setItem('spendwise_lkr_profile_name', newName);
+    localStorage.setItem('spendwise_lkr_profile_status', newStatus);
+    
+    closeModal(elements.profileModal);
+    updateUI(); // වෙනස්කම් සජීවීව පිටුවේ පෙන්වීමට
 }
