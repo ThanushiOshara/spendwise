@@ -148,7 +148,8 @@ const elements = {
     profileNameInput: document.getElementById('profile-name-input'),
     profileStatusInput: document.getElementById('profile-status-input'),
     btnCancelProfile: document.getElementById('btn-cancel-profile'),
-    btnCloseProfileModal: document.getElementById('btn-close-profile-modal')
+    btnCloseProfileModal: document.getElementById('btn-close-profile-modal'),
+        btnExportCSV: document.getElementById('btn-export-csv')
 };
 // 5. Format & LocalStorage Helpers (මුදල් හැඩගැන්වීම් සහ දත්ත සුරැකීම්)
 function formatCurrency(amount) {
@@ -176,6 +177,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Lucide Icons සක්‍රීය කිරීම
     lucide.createIcons();
+
+    // CSV file එකක් ලෙස Export කිරීමේ බොත්තම
+    elements.btnExportCSV.addEventListener('click', exportToCSV);
 });
 
 // 7. Event Listeners (බොත්තම් ක්ලික් කිරීම් සහ වෙනස්වීම් හඳුනාගැනීම)
@@ -717,4 +721,45 @@ function handleProfileSubmit(e) {
     
     closeModal(elements.profileModal);
     updateUI(); // වෙනස්කම් සජීවීව පිටුවේ පෙන්වීමට
+}
+// ගනුදෙනු ලැයිස්තුව CSV (Excel) ගොනුවක් ලෙස ඩවුන්ලෝඩ් කිරීම
+function exportToCSV() {
+    // ගනුදෙනු කිසිවක් නැත්නම් දැනුම්දීමක් පෙන්වීම
+    if (state.transactions.length === 0) {
+        alert('No transactions to export!');
+        return;
+    }
+    
+    // CSV ගොනුවේ තීරු (Columns) වල නම්
+    const headers = ['Transaction ID', 'Type', 'Amount (Rs.)', 'Category', 'Date', 'Description'];
+    
+    // ගනුදෙනු දත්ත CSV පේළි බවට පත් කිරීම
+    const rows = state.transactions.map(t => [
+        t.id,
+        t.type,
+        t.amount,
+        t.category,
+        t.date,
+        // Description එක ඇතුළත කොමා (,) තිබේ නම් Excel එකේ පේළි කැඩීම වැළැක්වීමට double quotes යෙදීම:
+        `"${t.description.replace(/"/g, '""')}"`
+    ]);
+    
+    // Headers සහ දත්ත පේළි එකතු කර සම්පූර්ණ CSV පෙළ (text) සැකසීම
+    const csvContent = [
+        headers.join(','),
+        ...rows.map(e => e.join(','))
+    ].join('\n');
+    
+    // Browser එක හරහා ඩවුන්ලෝඩ් වීමට සලස්වන ක්‍රියාවලිය (Blob & Download Link)
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'spendwise_transactions.csv');
+    link.style.visibility = 'hidden';
+    
+    document.body.appendChild(link);
+    link.click(); // බොත්තම ක්ලික් කිරීම ස්වයංක්‍රීයව සිදු කිරීම
+    document.body.removeChild(link);
 }

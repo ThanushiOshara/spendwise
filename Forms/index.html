@@ -92,12 +92,16 @@
                 </div>
 
                 <!-- Recent Transactions Container -->
-                <div class="glass-card list-container">
-                    <div class="card-header">
+                                    <div class="card-header">
                         <h2>Recent Transactions</h2>
-                        <button class="btn btn-secondary btn-sm" id="btn-open-filter">
-                            <i data-lucide="filter" class="icon-sm"></i> Filters
-                        </button>
+                        <div class="header-actions" style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-secondary btn-sm" id="btn-export-csv" title="Export as CSV">
+                                <i data-lucide="download" class="icon-sm"></i> Export
+                            </button>
+                            <button class="btn btn-secondary btn-sm" id="btn-open-filter">
+                                <i data-lucide="filter" class="icon-sm"></i> Filters
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Filter Options Panel (perahan thiruwa) -->
