@@ -34,7 +34,8 @@ let state = {
     budgetLimit: parseFloat(localStorage.getItem('spendwise_lkr_budget_limit')) || 100000,
     savingsGoals: JSON.parse(localStorage.getItem('spendwise_lkr_savings_goals')) || [],
     profileName: localStorage.getItem('spendwise_lkr_profile_name') || 'Guest',
-    profileStatus: localStorage.getItem('spendwise_lkr_profile_status') || 'Financial Tracker'
+    profileStatus: localStorage.getItem('spendwise_lkr_profile_status') || 'Financial Tracker',
+    theme: localStorage.getItem('spendwise_lkr_theme') || 'dark' // <-- අලුතින් එක් කළ කොටස
 };
 
 // Seed initial demo data
@@ -149,7 +150,9 @@ const elements = {
     profileStatusInput: document.getElementById('profile-status-input'),
     btnCancelProfile: document.getElementById('btn-cancel-profile'),
     btnCloseProfileModal: document.getElementById('btn-close-profile-modal'),
-        btnExportCSV: document.getElementById('btn-export-csv')
+        btnExportCSV: document.getElementById('btn-export-csv'),
+            themeToggle: document.getElementById('btn-theme-toggle'),
+    themeIcon: document.getElementById('theme-icon')
 };
 // 5. Format & LocalStorage Helpers (මුදල් හැඩගැන්වීම් සහ දත්ත සුරැකීම්)
 function formatCurrency(amount) {
@@ -167,7 +170,14 @@ function saveToLocalStorage(key, data) {
 document.addEventListener('DOMContentLoaded', () => {
     // ගනුදෙනු ඇතුළත් කරන පෝරමයේ දිනයට අද දිනය ස්වයංක්‍රීයව ලබාදීම
     elements.txDate.value = new Date().toISOString().split('T')[0];
-    
+        // Theme එක මුලින්ම සකස් කිරීම
+    if (state.theme === 'light') {
+        document.body.classList.add('light-mode');
+        elements.themeIcon.setAttribute('data-lucide', 'moon');
+    } else {
+        document.body.classList.remove('light-mode');
+        elements.themeIcon.setAttribute('data-lucide', 'sun');
+    }
     setupEventListeners();
     populateCategoryDropdown(elements.txCategory, 'expense'); // Default එක ලෙස expense Categories පෙන්වීම
     populateCategoryFilterDropdown(); // සෙවුම් තීරුවේ (Filter) ඇති Categories පිරවීම
@@ -249,9 +259,13 @@ function setupEventListeners() {
     // Profile Modal එක වැසීම (Cancel / Close)
     elements.btnCloseProfileModal.addEventListener('click', () => closeModal(elements.profileModal));
     elements.btnCancelProfile.addEventListener('click', () => closeModal(elements.profileModal));
+
+        // Theme Toggle බොත්තම ක්ලික් කිරීම
+    elements.themeToggle.addEventListener('click', toggleTheme);
 }
 
-// 8. Modal පාලන Helpers
+// 8. Modal පාලන Helpers    // Theme Toggle බොත්තම ක්ලික් කිරීම
+    elements.themeToggle.addEventListener('click', toggleTheme);
 function openModal(modal) {
     modal.classList.add('active');
 }
@@ -762,4 +776,25 @@ function exportToCSV() {
     document.body.appendChild(link);
     link.click(); // බොත්තම ක්ලික් කිරීම ස්වයංක්‍රීයව සිදු කිරීම
     document.body.removeChild(link);
+}
+// Theme එක මාරු කිරීම (Light Mode <-> Dark Mode)
+function toggleTheme() {
+    const isLight = document.body.classList.toggle('light-mode');
+    state.theme = isLight ? 'light' : 'dark';
+    
+    // LocalStorage හි සුරැකීම
+    localStorage.setItem('spendwise_lkr_theme', state.theme);
+    
+    // Icon එක වෙනස් කිරීම (සුදු පසුබිමට හඳ සලකුණත්, කළු පසුබිමට ඉර සලකුණත්)
+    if (isLight) {
+        elements.themeIcon.setAttribute('data-lucide', 'moon');
+    } else {
+        elements.themeIcon.setAttribute('data-lucide', 'sun');
+    }
+    
+    // Icons නැවත ලෝඩ් කිරීම
+    lucide.createIcons();
+    
+    // ප්‍රස්ථාරය නැවත ඇඳීම (වර්ණ ගැළපීම සඳහා)
+    renderChart(state.transactions);
 }
